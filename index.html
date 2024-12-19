@@ -1,0 +1,864 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Datarized Hub</title>
+    <!-- Bootstrap CSS -->
+    <link
+      href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css"
+      rel="stylesheet"
+    />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <link rel="stylesheet" href="/bootstrap-5.0.2-dist/css/bootstrap.css">
+    <style>
+      /* Add background image to body */
+      body {
+        background-image: url('/orange\ bg.jpg');
+        background-size: cover;
+        background-position: center;
+        background-attachment: fixed;
+        background-repeat: no-repeat;
+      }
+
+      /* Custom Styling (optional) */
+      .navbar-brand {
+        font-weight: bold;
+      }
+
+      .nav-link {
+        font-size: 16px;
+        position: relative;
+        transition: color 0.3s ease;
+      }
+
+      .nav-link:hover {
+        color: #fdb50d !important; /* Bootstrap primary color */
+      }
+
+      .nav-link::after {
+        content: '';
+        position: absolute;
+        width: 0;
+        height: 2px;
+        bottom: 0;
+        left: 0;
+        background-color: #fdd50d;
+        transition: width 0.3s ease;
+      }
+
+      .nav-link:hover::after {
+        width: 100%;
+      }
+
+      .dropdown-menu {
+        min-width: 200px;
+      }
+
+      .dropdown-item {
+        transition: background-color 0.3s ease, padding-left 0.3s ease;
+      }
+
+      .dropdown-item:hover {
+        background-color: #e9ecef;
+        padding-left: 1.5rem;
+      }
+
+      /* Add these new styles for hover dropdown */
+      .dropdown:hover .dropdown-menu {
+        display: block;
+        animation: fadeIn 0.3s ease;
+      }
+
+      @keyframes fadeIn {
+        from {
+          opacity: 0;
+          transform: translateY(-10px);
+        }
+        to {
+          opacity: 1;
+          transform: translateY(0);
+        }
+      }
+
+      /* Optional: Add a small delay before dropdown disappears */
+      .dropdown-menu {
+        margin-top: 0;
+        display: none;
+      }
+
+      /* Add these new styles for text content */
+      .content-section h2 {
+        color: #333;
+        font-size: 2.2rem;
+        margin-bottom: 1.5rem;
+        font-weight: 600;
+        border-bottom: 2px solid #fdb50d;
+        padding-bottom: 0.5rem;
+      }
+
+      .content-section p {
+        font-size: 1.1rem;
+        line-height: 1.6;
+        color: #555;
+        margin-bottom: 1.2rem;
+      }
+
+      .feature-list {
+        list-style: none;
+        padding: 0;
+      }
+
+      .feature-list li {
+        margin-bottom: 1rem;
+        padding-left: 2rem;
+        position: relative;
+      }
+
+      .feature-list i {
+        position: absolute;
+        left: 0;
+        top: 0.25rem;
+        color: #fdb50d;
+      }
+
+      /* Parallax and Scroll Effects */
+      html {
+        scroll-behavior: smooth;
+      }
+
+      /* Enhanced Parallax Effects */
+      .parallax-section {
+        position: relative;
+        background-attachment: fixed;
+        background-position: center;
+        background-repeat: no-repeat;
+        background-size: cover;
+        overflow: hidden;
+      }
+
+      /* Parallax overlay effect */
+      .parallax-overlay {
+        position: absolute;
+        top: 0;
+        left: 0;
+        right: 0;
+        bottom: 0;
+        background: linear-gradient(45deg, rgba(0,0,0,0.4), rgba(0,0,0,0.2));
+        z-index: 1;
+      }
+
+      .parallax-content {
+        position: relative;
+        z-index: 2;
+      }
+
+      /* Enhanced Section Transitions */
+      .fade-in-section {
+        opacity: 0;
+        transform: translateY(30px);
+        transition: all 0.8s cubic-bezier(0.645, 0.045, 0.355, 1);
+        will-change: transform, opacity;
+      }
+
+      .fade-in-section.visible {
+        opacity: 1;
+        transform: translateY(0);
+      }
+
+      /* Staggered animation for children */
+      .fade-in-section.visible .stagger-item {
+        animation: staggerFade 0.5s cubic-bezier(0.645, 0.045, 0.355, 1) forwards;
+        opacity: 0;
+      }
+
+      .fade-in-section.visible .stagger-item:nth-child(1) { animation-delay: 0.1s; }
+      .fade-in-section.visible .stagger-item:nth-child(2) { animation-delay: 0.2s; }
+      .fade-in-section.visible .stagger-item:nth-child(3) { animation-delay: 0.3s; }
+      .fade-in-section.visible .stagger-item:nth-child(4) { animation-delay: 0.4s; }
+
+      @keyframes staggerFade {
+        from {
+          opacity: 0;
+          transform: translateY(20px);
+        }
+        to {
+          opacity: 1;
+          transform: translateY(0);
+        }
+      }
+
+      /* Parallax scroll speed variations */
+      .parallax-slow {
+        background-attachment: fixed;
+        transform: translateZ(-1px) scale(2);
+      }
+
+      .parallax-medium {
+        background-attachment: fixed;
+        transform: translateZ(-0.5px) scale(1.5);
+      }
+
+      .parallax-fast {
+        background-attachment: fixed;
+        transform: translateZ(0) scale(1);
+      }
+
+      /* Enhanced Scroll Indicator */
+      .scroll-indicator {
+        position: fixed;
+        top: 0;
+        left: 0;
+        right: 0;
+        height: 3px;
+        background: #fdb50d;
+        transform-origin: 0 50%;
+        transform: scaleX(0);
+        z-index: 1000;
+      }
+
+      /* Enhanced Scroll to Top */
+      .scroll-to-top {
+        position: fixed;
+        bottom: 30px;
+        right: 30px;
+        background: rgba(253, 181, 13, 0.9);
+        width: 50px;
+        height: 50px;
+        border-radius: 50%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        color: white;
+        text-decoration: none;
+        opacity: 0;
+        visibility: hidden;
+        transition: all 0.4s cubic-bezier(0.645, 0.045, 0.355, 1);
+        z-index: 1000;
+        backdrop-filter: blur(5px);
+      }
+
+      .scroll-to-top.visible {
+        opacity: 1;
+        visibility: visible;
+      }
+
+      .scroll-to-top:hover {
+        transform: translateY(-5px);
+        box-shadow: 0 10px 20px rgba(253, 181, 13, 0.3);
+        background: rgba(253, 181, 13, 1);
+      }
+
+      /* Icon Animations */
+      .nav-link i {
+        transition: transform 0.3s ease;
+      }
+
+      .nav-link:hover i {
+        transform: scale(1.2);
+      }
+
+      .feature-list i {
+        transition: all 0.3s ease;
+      }
+
+      .feature-list li:hover i {
+        transform: rotate(15deg);
+      }
+
+      .social-links a {
+        width: 40px;
+        height: 40px;
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        border-radius: 50%;
+        transition: all 0.3s ease;
+      }
+
+      .social-links a:hover {
+        transform: translateY(-3px);
+        box-shadow: 0 5px 15px rgba(253, 181, 13, 0.3);
+      }
+
+      .contact-info i {
+        transition: all 0.3s ease;
+      }
+
+      .contact-info p:hover i {
+        transform: bounce;
+        animation: iconBounce 0.5s ease infinite;
+      }
+
+      @keyframes iconBounce {
+        0%, 100% {
+          transform: translateY(0);
+        }
+        50% {
+          transform: translateY(-5px);
+        }
+      }
+
+      /* Icon sizes and colors */
+      .fa-3x {
+        font-size: 3em;
+      }
+
+      .text-warning {
+        color: #fdb50d !important;
+      }
+
+      /* Icon hover effects */
+      .card i {
+        transition: all 0.3s ease;
+      }
+
+      .card:hover i {
+        transform: scale(1.1) rotate(10deg);
+        color: #fdb50d;
+      }
+
+      /* Floating animation for feature icons */
+      @keyframes floating {
+        0% {
+          transform: translateY(0px);
+        }
+        50% {
+          transform: translateY(-5px);
+        }
+        100% {
+          transform: translateY(0px);
+        }
+      }
+
+      .feature-list i {
+        animation: floating 3s ease infinite;
+      }
+    </style>
+  </head>
+  <body>
+    <!-- Navbar -->
+    <nav class="navbar navbar-expand-lg bg-white shadow-sm py-3">
+      <div class="container-fluid">
+        <!-- Logo / Brand -->
+        <a class="navbar-brand" href="#">
+            <img src="datarized hub.png" alt="Datarized Hub" height="40" class="d-inline-block align-top">
+        </a>
+
+        <!-- Navbar Toggler -->
+        <button
+          class="navbar-toggler"
+          type="button"
+          data-bs-toggle="collapse"
+          data-bs-target="#navbarNav"
+          aria-controls="navbarNav"
+          aria-expanded="false"
+          aria-label="Toggle navigation"
+        >
+          <span class="navbar-toggler-icon"></span>
+        </button>
+
+        <!-- Navbar Links -->
+        <div class="collapse navbar-collapse" id="navbarNav">
+          <ul class="navbar-nav ms-auto">
+            <li class="nav-item">
+              <a class="nav-link" href="#home"><i class="fas fa-home me-1"></i> Home</a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link" href="#services"><i class="fas fa-cogs me-1"></i> Services</a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link" href="#programs"><i class="fas fa-graduation-cap me-1"></i> Programs</a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link" href="#contact"><i class="fas fa-envelope me-1"></i> Contact</a>
+            </li>
+          </ul>
+        </div>
+      </div>
+    </nav>
+    <!-- Learn and Consult Section -->
+    <div class="container-fluid bg-white py-5">
+      <div class="container">
+        <div class="text-center mb-5">
+          <i class="fas fa-chart-line fa-3x text-warning mb-3"></i>
+          <h2 class="display-4 fw-bold">Welcome to DataRized Hub</h2>
+          <p class="lead text-muted">Your premier partner in research and training consultancy</p>
+        </div>
+        <div class="row g-4">
+          <div class="col-md-6">
+            <div class="card h-100 border-0 shadow-sm">
+              <div class="card-body p-4">
+                <i class="fas fa-laptop-code fa-3x text-warning mb-3"></i>
+                <h3 class="card-title">Learn With Us</h3>
+                <p class="card-text">Join our structured learning programs designed to equip you with in-demand skills in data analytics, AI, and more. Our hands-on approach ensures practical knowledge that's immediately applicable.</p>
+                <a href="#" class="btn btn-warning">Explore Programs</a>
+              </div>
+            </div>
+          </div>
+          <div class="col-md-6">
+            <div class="card h-100 border-0 shadow-sm">
+              <div class="card-body p-4">
+                <i class="fas fa-comments fa-3x text-warning mb-3"></i>
+                <h3 class="card-title">Consult With Us</h3>
+                <p class="card-text">Get personalized guidance from our industry experts. Whether you're starting a new project or scaling existing operations, we're here to help you succeed.</p>
+                <a href="#" class="btn btn-warning">Book Consultation</a>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Two-column layout -->
+    <div class="container-fluid mt-4">
+      <div class="row">
+        <!-- Left Column -->
+        <div class="col-md-6 p-4">            
+            <img class="img-fluid" src="index-img.png" alt="Datarized Hub">          
+        </div>
+
+        <!-- Right Column -->
+        <div class="col-md-6 p-4">
+          <div class="bg-white rounded shadow p-4 content-section">
+            <h2><i class="fas fa-chart-line me-2"></i>Welcome to DataRized Hub</h2>
+            <p>Your premier partner in research and training consultancy. At DataRized Hub, we focus on harnessing the power of data-driven technologies to empower individuals, organizations, and businesses.</p>
+            
+            <h3 class="mt-4 mb-3">Our Expertise:</h3>
+            <ul class="feature-list">
+              <li>
+                <i class="fas fa-microscope text-warning me-2"></i>
+                <strong>Research:</strong> Providing insightful data analysis and innovative solutions to real-world problems.
+              </li>
+              <li>
+                <i class="fas fa-graduation-cap text-warning me-2"></i>
+                <strong>Training:</strong> Equipping professionals and students with skills in IT and emerging technologies.
+              </li>
+              <li>
+                <i class="fas fa-handshake text-warning me-2"></i>
+                <strong>Consultancy:</strong> Supporting businesses with tailored strategies and technological solutions.
+              </li>
+            </ul>
+
+            <p class="mt-4">Whether you're looking to explore data technologies or enhance your skills, DataRized Hub is committed to driving excellence in all things data and IT-related.</p>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Services Section -->
+    <div id="services" class="container-fluid bg-white py-5">
+      <div class="container">
+        <div class="text-center mb-5">
+          <h2 class="display-4 fw-bold">Our Services</h2>
+          <p class="lead text-muted">Discover how we can help you achieve your goals</p>
+        </div>
+        <div class="row g-4">
+          <!-- Service Card 1 -->
+          <div class="col-md-4">
+            <div class="card h-100 border-0 shadow-sm">
+              <div class="card-body p-4">
+                <i class="fas fa-chart-pie fa-3x text-warning mb-3"></i>
+                <h3 class="card-title">Data Analytics</h3>
+                <p class="card-text">Transform your raw data into actionable insights. Our analytics solutions help you make data-driven decisions.</p>
+                <a href="#" class="btn btn-warning">Learn More</a>
+              </div>
+            </div>
+          </div>
+          
+          <!-- Service Card 2 -->
+          <div class="col-md-4">
+            <div class="card h-100 border-0 shadow-sm">
+              <div class="card-body p-4">
+                <i class="fas fa-robot fa-3x text-warning mb-3"></i>
+                <h3 class="card-title">AI Solutions</h3>
+                <p class="card-text">Leverage the power of artificial intelligence to automate processes and enhance efficiency.</p>
+                <a href="#" class="btn btn-warning">Learn More</a>
+              </div>
+            </div>
+          </div>
+          
+          <!-- Service Card 3 -->
+          <div class="col-md-4">
+            <div class="card h-100 border-0 shadow-sm">
+              <div class="card-body p-4">
+                <i class="fas fa-chalkboard-teacher fa-3x text-warning mb-3"></i>
+                <h3 class="card-title">Training Programs</h3>
+                <p class="card-text">Comprehensive training programs designed to upskill your team in modern technologies.</p>
+                <a href="#" class="btn btn-warning">Learn More</a>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Programs & Courses Section -->
+    <div id="programs" class="container-fluid py-5">
+      <div class="container">
+        <div class="text-center mb-5">
+          <h2 class="display-4 fw-bold text-white">Programs & Courses</h2>
+          <p class="lead text-white">Enhance your skills with our specialized programs</p>
+        </div>
+        <div class="row g-4">
+          <!-- Course Card 1 -->
+          <div class="col-lg-3 col-md-6">
+            <div class="card h-100 border-0 shadow-sm course-card">
+              <div class="card-body p-4">
+                <i class="fas fa-brain fa-3x text-warning mb-3"></i>
+                <h3 class="card-title h4">AI & Machine Learning</h3>
+                <p class="card-text">Master the fundamentals of AI and ML with hands-on projects.</p>
+                <ul class="list-unstyled mt-3 mb-4">
+                  <li><i class="fas fa-check-circle text-warning me-2"></i>Neural Networks</li>
+                  <li><i class="fas fa-check-circle text-warning me-2"></i>Deep Learning</li>
+                  <li><i class="fas fa-check-circle text-warning me-2"></i>Python Programming</li>
+                </ul>
+                <a href="enrollment.html" class="btn btn-warning w-100">Enroll Now</a>
+              </div>
+            </div>
+          </div>
+
+          <!-- Course Card 2 -->
+          <div class="col-lg-3 col-md-6">
+            <div class="card h-100 border-0 shadow-sm course-card">
+              <div class="card-body p-4">
+                <i class="fas fa-chart-line fa-3x text-warning mb-3"></i>
+                <h3 class="card-title h4">Data Analytics</h3>
+                <p class="card-text">Learn to analyze data and derive meaningful insights.</p>
+                <ul class="list-unstyled mt-3 mb-4">
+                  <li><i class="fas fa-check-circle text-warning me-2"></i>Statistical Analysis</li>
+                  <li><i class="fas fa-check-circle text-warning me-2"></i>Data Visualization</li>
+                  <li><i class="fas fa-check-circle text-warning me-2"></i>Business Intelligence</li>
+                </ul>
+                <a href="enrollment.html" class="btn btn-warning w-100">Enroll Now</a>
+              </div>
+            </div>
+          </div>
+
+          <!-- Course Card 3 -->
+          <div class="col-lg-3 col-md-6">
+            <div class="card h-100 border-0 shadow-sm course-card">
+              <div class="card-body p-4">
+                <i class="fas fa-database fa-3x text-warning mb-3"></i>
+                <h3 class="card-title h4">Big Data</h3>
+                <p class="card-text">Handle and process large-scale data efficiently.</p>
+                <ul class="list-unstyled mt-3 mb-4">
+                  <li><i class="fas fa-check-circle text-warning me-2"></i>Hadoop Ecosystem</li>
+                  <li><i class="fas fa-check-circle text-warning me-2"></i>Spark Processing</li>
+                  <li><i class="fas fa-check-circle text-warning me-2"></i>NoSQL Databases</li>
+                </ul>
+                  <a href="enrollment.html" class="btn btn-warning w-100">Enroll Now</a>
+              </div>
+            </div>
+          </div>
+
+          <!-- Course Card 4 -->
+          <div class="col-lg-3 col-md-6">
+            <div class="card h-100 border-0 shadow-sm course-card">
+              <div class="card-body p-4">
+                <i class="fas fa-cloud fa-3x text-warning mb-3"></i>
+                <h3 class="card-title h4">Cloud Computing</h3>
+                <p class="card-text">Deploy and manage applications in the cloud.</p>
+                <ul class="list-unstyled mt-3 mb-4">
+                  <li><i class="fas fa-check-circle text-warning me-2"></i>AWS Services</li>
+                  <li><i class="fas fa-check-circle text-warning me-2"></i>Azure Platform</li>
+                  <li><i class="fas fa-check-circle text-warning me-2"></i>Cloud Security</li>
+                </ul>
+                <a href="enrollment.html" class="btn btn-warning w-100">Enroll Now</a>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Contact Us Section -->
+    <div id="contact" class="container-fluid bg-white py-5">
+      <div class="container">
+        <div class="text-center mb-5">
+          <h2 class="display-4 fw-bold">Contact Us</h2>
+          <p class="lead text-muted">Get in touch with us for any inquiries</p>
+        </div>
+        <div class="row g-4">
+          <!-- Contact Information -->
+          <div class="col-lg-4">
+            <div class="card h-100 border-0 shadow-sm contact-card">
+              <div class="card-body p-4">
+                <h3 class="card-title mb-4">Contact Information</h3>
+                <div class="contact-info">
+                  <p><i class="fas fa-map-marker-alt text-warning me-2"></i>123 Main St, Gulu, Uganda</p>
+                  <p><i class="fas fa-phone text-warning me-2"></i>(+256) 764-6877777</p>
+                  <p><i class="fas fa-envelope text-warning me-2"></i>info@datarizedhub.com</p>
+                </div>
+                <div class="social-links mt-4">
+                  <a href="#" class="btn btn-outline-warning me-2">
+                    <i class="fab fa-facebook-f"></i>
+                  </a>
+                  <a href="#" class="btn btn-outline-warning me-2">
+                    <i class="fab fa-twitter"></i>
+                  </a>
+                  <a href="#" class="btn btn-outline-warning me-2">
+                    <i class="fab fa-linkedin-in"></i>
+                  </a>
+                  <a href="#" class="btn btn-outline-warning">
+                    <i class="fab fa-instagram"></i>
+                  </a>
+                </div>
+              </div>
+            </div>
+          </div>
+          <!-- Contact Form -->
+          <div class="col-lg-8">
+            <div class="card h-100 border-0 shadow-sm contact-card">
+              <div class="card-body p-4">
+                <h3 class="card-title mb-4">Contact Form</h3>
+                <form>
+                  <div class="mb-3">
+                    <label for="name" class="form-label">Name</label>
+                    <input type="text" class="form-control" id="name" placeholder="Your Name">
+                  </div>
+                  <div class="mb-3">
+                    <label for="email" class="form-label">Email</label>
+                    <input type="email" class="form-control" id="email" placeholder="Your Email">
+                  </div>
+                  <div class="mb-3">
+                    <label for="message" class="form-label">Message</label>
+                    <textarea class="form-control" id="message" rows="3" placeholder="Your Message"></textarea>
+                  </div>
+                  <button type="submit" class="btn btn-warning w-100">Send Message</button>
+                </form>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Footer Section -->
+    <footer class="bg-dark text-white py-5 mt-5">
+      <div class="container">
+        <div class="row g-4">
+          <!-- Company Info -->
+          <div class="col-lg-4 col-md-6">
+            <h5 class="mb-4 fw-bold">DataRized Hub</h5>
+            <p class="mb-4">Empowering individuals and organizations with cutting-edge data analytics and AI solutions.</p>
+            <div class="social-links">
+              <a href="#" class="text-white me-3 social-icon"><i class="fab fa-facebook-f"></i></a>
+              <a href="#" class="text-white me-3 social-icon"><i class="fab fa-twitter"></i></a>
+              <a href="#" class="text-white me-3 social-icon"><i class="fab fa-linkedin-in"></i></a>
+              <a href="#" class="text-white social-icon"><i class="fab fa-instagram"></i></a>
+            </div>
+          </div>
+
+          <!-- Quick Links -->
+          <div class="col-lg-2 col-md-6">
+            <h5 class="mb-4 fw-bold">Quick Links</h5>
+            <ul class="list-unstyled footer-links">
+              <li><a href="#">Home</a></li>
+              <li><a href="#">About Us</a></li>
+              <li><a href="#">Services</a></li>
+              <li><a href="#">Courses</a></li>
+              <li><a href="#">Contact</a></li>
+            </ul>
+          </div>
+
+          <!-- Services -->
+          <div class="col-lg-3 col-md-6">
+            <h5 class="mb-4 fw-bold">Our Services</h5>
+            <ul class="list-unstyled footer-links">
+              <li><a href="#">Data Analytics</a></li>
+              <li><a href="#">AI Solutions</a></li>
+              <li><a href="#">Training Programs</a></li>
+              <li><a href="#">Consultancy</a></li>
+              <li><a href="#">Research</a></li>
+            </ul>
+          </div>
+
+          <!-- Newsletter -->
+          <div class="col-lg-3 col-md-6">
+            <h5 class="mb-4 fw-bold">Newsletter</h5>
+            <p>Subscribe to our newsletter for updates and insights.</p>
+            <form class="newsletter-form">
+              <div class="input-group mb-3">
+                <input type="email" class="form-control" placeholder="Your email" aria-label="Your email">
+                <button class="btn btn-warning" type="submit">Subscribe</button>
+              </div>
+            </form>
+          </div>
+        </div>
+
+        <!-- Copyright -->
+        <div class="border-top mt-4 pt-4 text-center">
+          <p class="mb-0">&copy; 2024 DataRized Hub. All rights reserved.</p>
+        </div>
+      </div>
+    </footer>
+
+    <style>
+      /* Footer Styles */
+      .footer-links li {
+        margin-bottom: 0.5rem;
+      }
+
+      .footer-links a {
+        color: #ffffff;
+        text-decoration: none;
+        transition: all 0.3s ease;
+        opacity: 0.8;
+        position: relative;
+      }
+
+      .footer-links a::before {
+        content: '→';
+        position: absolute;
+        left: -20px;
+        opacity: 0;
+        transition: all 0.3s ease;
+      }
+
+      .footer-links a:hover {
+        opacity: 1;
+        padding-left: 20px;
+      }
+
+      .footer-links a:hover::before {
+        opacity: 1;
+      }
+
+      .social-icon {
+        transition: all 0.3s ease;
+        display: inline-block;
+      }
+
+      .social-icon:hover {
+        transform: translateY(-3px);
+        color: #fdb50d !important;
+      }
+
+      .newsletter-form .form-control {
+        background-color: rgba(255, 255, 255, 0.1);
+        border: 1px solid rgba(255, 255, 255, 0.1);
+        color: white;
+      }
+
+      .newsletter-form .form-control:focus {
+        background-color: rgba(255, 255, 255, 0.15);
+        border-color: #fdb50d;
+        box-shadow: none;
+      }
+    </style>
+
+    <!-- Bootstrap JS Bundle with Popper -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+
+    <!-- Add scroll to top button -->
+    <a href="#home" class="scroll-to-top">
+      <i class="fas fa-arrow-up"></i>
+    </a>
+
+    <!-- Add this JavaScript before the closing body tag -->
+    <script>
+      // Navbar scroll effect
+      window.addEventListener('scroll', function() {
+        const navbar = document.querySelector('.navbar');
+        const scrollTop = document.querySelector('.scroll-to-top');
+        
+        if (window.scrollY > 50) {
+          navbar.classList.add('scrolled');
+          scrollTop.classList.add('visible');
+        } else {
+          navbar.classList.remove('scrolled');
+          scrollTop.classList.remove('visible');
+        }
+      });
+
+      // Fade in sections on scroll
+      document.addEventListener('DOMContentLoaded', function() {
+        const sections = document.querySelectorAll('.container-fluid');
+        
+        const fadeInOptions = {
+          threshold: 0.2
+        };
+
+        const fadeInObserver = new IntersectionObserver(function(entries, observer) {
+          entries.forEach(entry => {
+            if (entry.isIntersecting) {
+              entry.target.classList.add('fade-in-section', 'visible');
+              observer.unobserve(entry.target);
+            }
+          });
+        }, fadeInOptions);
+
+        sections.forEach(section => {
+          section.classList.add('fade-in-section');
+          fadeInObserver.observe(section);
+        });
+      });
+
+      // Smooth scroll for all anchor links
+      document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+        anchor.addEventListener('click', function(e) {
+          e.preventDefault();
+          const target = document.querySelector(this.getAttribute('href'));
+          if (target) {
+            target.scrollIntoView({
+              behavior: 'smooth',
+              block: 'start'
+            });
+          }
+        });
+      });
+
+      // Add this JavaScript for dynamic shadows
+      document.addEventListener('DOMContentLoaded', function() {
+        const cards = document.querySelectorAll('.card');
+        
+        // Dynamic shadow on mouse move
+        cards.forEach(card => {
+          card.addEventListener('mousemove', (e) => {
+            const rect = card.getBoundingClientRect();
+            const x = e.clientX - rect.left;
+            const y = e.clientY - rect.top;
+            
+            const centerX = rect.width / 2;
+            const centerY = rect.height / 2;
+            
+            const percentX = (x - centerX) / centerX;
+            const percentY = (y - centerY) / centerY;
+            
+            const shadow = `
+              ${-percentX * 20}px 
+              ${-percentY * 20}px 
+              40px rgba(0, 0, 0, 0.1),
+              ${percentX * 20}px 
+              ${percentY * 20}px 
+              60px rgba(253, 181, 13, 0.1)
+            `;
+            
+            card.style.boxShadow = shadow;
+          });
+
+          card.addEventListener('mouseleave', () => {
+            card.style.boxShadow = '';
+          });
+        });
+
+        // Shadow on scroll
+        window.addEventListener('scroll', () => {
+          requestAnimationFrame(() => {
+            cards.forEach(card => {
+              const rect = card.getBoundingClientRect();
+              const scrollPercent = rect.top / window.innerHeight;
+              
+              if (scrollPercent > 0 && scrollPercent < 1) {
+                card.classList.add('scrolled');
+              } else {
+                card.classList.remove('scrolled');
+              }
+            });
+          });
+        });
+      });
+    </script>
+  </body>
+</html>

@@ -1,0 +1,646 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Enroll - DataRized Hub</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    
+    <style>
+        /* Progress Bar */
+        .enrollment-progress {
+            position: relative;
+            margin: 2rem auto;
+            padding: 0;
+            width: 100%;
+            max-width: 800px;
+        }
+
+        .progress-step {
+            width: 25%;
+            float: left;
+            position: relative;
+            text-align: center;
+        }
+
+        .progress-step:before {
+            content: '';
+            width: 30px;
+            height: 30px;
+            background: #fff;
+            border: 2px solid #fdb50d;
+            border-radius: 50%;
+            display: block;
+            margin: 0 auto 10px;
+            transition: all 0.3s ease;
+        }
+
+        .progress-step.active:before {
+            background: #fdb50d;
+        }
+
+        .progress-step:after {
+            content: '';
+            position: absolute;
+            width: 100%;
+            height: 2px;
+            background: #fdb50d;
+            top: 15px;
+            left: -50%;
+            z-index: -1;
+        }
+
+        .progress-step:first-child:after {
+            content: none;
+        }
+
+        /* Form Styling */
+        .enrollment-form {
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 2rem;
+            background: white;
+            border-radius: 10px;
+            box-shadow: 
+              0 10px 30px rgba(0, 0, 0, 0.1),
+              0 20px 60px rgba(0, 0, 0, 0.08),
+              0 0 0 1px rgba(253, 181, 13, 0.05);
+            transition: all 0.4s cubic-bezier(0.645, 0.045, 0.355, 1);
+        }
+
+        .enrollment-form:hover {
+            transform: translateY(-5px);
+            box-shadow: 
+              0 20px 40px rgba(0, 0, 0, 0.15),
+              0 30px 70px rgba(0, 0, 0, 0.1),
+              0 0 0 1px rgba(253, 181, 13, 0.1);
+        }
+
+        .form-section {
+            display: none;
+        }
+
+        .form-section.active {
+            display: block;
+            animation: fadeIn 0.5s ease;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .form-floating {
+            margin-bottom: 1rem;
+        }
+
+        .form-control:focus {
+            border-color: #fdb50d;
+            box-shadow: 
+              0 0 0 0.25rem rgba(253, 181, 13, 0.25),
+              0 5px 15px rgba(0, 0, 0, 0.1);
+        }
+
+        /* Custom File Upload */
+        .custom-file-upload {
+            border: 2px dashed #fdb50d;
+            border-radius: 10px;
+            padding: 2rem;
+            text-align: center;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .custom-file-upload:hover {
+            background: rgba(253, 181, 13, 0.1);
+        }
+
+        /* Help Button */
+        .help-button {
+            position: fixed;
+            bottom: 30px;
+            right: 30px;
+            width: 60px;
+            height: 60px;
+            background: #fdb50d;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            cursor: pointer;
+            box-shadow: 0 5px 15px rgba(253, 181, 13, 0.3);
+            transition: all 0.3s ease;
+        }
+
+        .help-button:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 8px 20px rgba(253, 181, 13, 0.4);
+        }
+
+        /* Payment Section */
+        .payment-option {
+            border: 1px solid #dee2e6;
+            border-radius: 10px;
+            padding: 1rem;
+            margin-bottom: 1rem;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            box-shadow: 
+              0 5px 15px rgba(0, 0, 0, 0.05),
+              0 0 0 1px rgba(0, 0, 0, 0.05);
+        }
+
+        .payment-option:hover {
+            transform: translateY(-5px);
+            box-shadow: 
+              0 15px 30px rgba(0, 0, 0, 0.1),
+              0 0 0 1px rgba(253, 181, 13, 0.1);
+        }
+
+        .payment-option.selected {
+            box-shadow: 
+              0 10px 20px rgba(253, 181, 13, 0.15),
+              0 0 0 2px rgba(253, 181, 13, 0.5);
+        }
+
+        /* Enhanced Shadows */
+        .enrollment-form {
+            box-shadow: 
+              0 10px 30px rgba(0, 0, 0, 0.1),
+              0 20px 60px rgba(0, 0, 0, 0.08),
+              0 0 0 1px rgba(253, 181, 13, 0.05);
+            transition: all 0.4s cubic-bezier(0.645, 0.045, 0.355, 1);
+        }
+
+        .enrollment-form:hover {
+            transform: translateY(-5px);
+            box-shadow: 
+              0 20px 40px rgba(0, 0, 0, 0.15),
+              0 30px 70px rgba(0, 0, 0, 0.1),
+              0 0 0 1px rgba(253, 181, 13, 0.1);
+        }
+
+        /* Parallax Hero Section */
+        .hero-section {
+            position: relative;
+            overflow: hidden;
+            background: linear-gradient(135deg, #1a1a1a, #2a2a2a);
+            padding: 120px 0;
+        }
+
+        .hero-parallax {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-image: url('path/to/your/pattern.png');
+            opacity: 0.1;
+            transform: translateZ(-1px) scale(2);
+        }
+
+        .hero-content {
+            position: relative;
+            z-index: 2;
+            color: white;
+        }
+
+        /* Enhanced Progress Steps */
+        .progress-step:before {
+            box-shadow: 0 0 20px rgba(253, 181, 13, 0.3);
+        }
+
+        .progress-step.active:before {
+            animation: pulse 2s infinite;
+        }
+
+        @keyframes pulse {
+            0% {
+                box-shadow: 0 0 0 0 rgba(253, 181, 13, 0.4);
+            }
+            70% {
+                box-shadow: 0 0 0 10px rgba(253, 181, 13, 0);
+            }
+            100% {
+                box-shadow: 0 0 0 0 rgba(253, 181, 13, 0);
+            }
+        }
+
+        /* Form Field Animations */
+        .form-floating input:focus + label,
+        .form-floating select:focus + label {
+            color: #fdb50d;
+            transform: translateY(-1.5rem) scale(0.85);
+        }
+
+        .form-control:focus {
+            box-shadow: 
+              0 0 0 0.25rem rgba(253, 181, 13, 0.25),
+              0 5px 15px rgba(0, 0, 0, 0.1);
+        }
+
+        /* Icon Animations */
+        .form-section i {
+            transition: all 0.3s ease;
+        }
+
+        .form-section:hover i {
+            transform: scale(1.1) rotate(10deg);
+        }
+
+        /* Payment Option Enhanced */
+        .payment-option {
+            box-shadow: 
+              0 5px 15px rgba(0, 0, 0, 0.05),
+              0 0 0 1px rgba(0, 0, 0, 0.05);
+        }
+
+        .payment-option:hover {
+            transform: translateY(-5px);
+            box-shadow: 
+              0 15px 30px rgba(0, 0, 0, 0.1),
+              0 0 0 1px rgba(253, 181, 13, 0.1);
+        }
+
+        .payment-option.selected {
+            box-shadow: 
+              0 10px 20px rgba(253, 181, 13, 0.15),
+              0 0 0 2px rgba(253, 181, 13, 0.5);
+        }
+
+        /* Floating Labels Animation */
+        .form-floating label {
+            transition: all 0.3s cubic-bezier(0.645, 0.045, 0.355, 1);
+        }
+
+        /* Button Enhancements */
+        .btn {
+            position: relative;
+            overflow: hidden;
+        }
+
+        .btn::after {
+            content: '';
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            width: 0;
+            height: 0;
+            background: rgba(255, 255, 255, 0.2);
+            border-radius: 50%;
+            transform: translate(-50%, -50%);
+            transition: width 0.6s, height 0.6s;
+        }
+
+        .btn:hover::after {
+            width: 300%;
+            height: 300%;
+        }
+    </style>
+</head>
+<body>
+    <!-- Navbar (same as main site) -->
+    <nav class="navbar navbar-expand-lg bg-white shadow-sm py-3">
+        <div class="container">
+            <a class="navbar-brand" href="index.html">
+                <img src="datarized hub.png" alt="Datarized Hub" height="40">
+            </a>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarNav">
+                <ul class="navbar-nav ms-auto">
+                    <li class="nav-item">
+                        <a class="nav-link" href="index.html"><i class="fas fa-home me-1"></i> Home</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="index.html#contact"><i class="fas fa-envelope me-1"></i> Contact</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link active" href="#"><i class="fas fa-user-graduate me-1"></i> Enroll</a>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Hero Section -->
+    <div class="container-fluid bg-light py-5">
+        <div class="container text-center">
+            <h1 class="display-4 fw-bold mb-3">Enrollment Form</h1>
+            <p class="lead mb-4">Join our program and start your journey towards success</p>
+            
+            <!-- Progress Steps -->
+            <div class="enrollment-progress clearfix mb-5">
+                <div class="progress-step active" data-step="1">
+                    <span>Personal Info</span>
+                </div>
+                <div class="progress-step" data-step="2">
+                    <span>Program Selection</span>
+                </div>
+                <div class="progress-step" data-step="3">
+                    <span>Documents</span>
+                </div>
+                <div class="progress-step" data-step="4">
+                    <span>Payment</span>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Enrollment Form -->
+    <div class="container py-5">
+        <form class="enrollment-form" id="enrollmentForm">
+            <!-- Step 1: Personal Information -->
+            <div class="form-section active" data-step="1">
+                <h3 class="mb-4">Personal Information</h3>
+                
+                <div class="row g-3">
+                    <div class="col-md-6">
+                        <div class="form-floating">
+                            <input type="text" class="form-control" id="fullName" placeholder="Full Name" required>
+                            <label for="fullName">Full Name</label>
+                        </div>
+                    </div>
+                    
+                    <div class="col-md-6">
+                        <div class="form-floating">
+                            <input type="date" class="form-control" id="dob" required>
+                            <label for="dob">Date of Birth</label>
+                        </div>
+                    </div>
+
+                    <div class="col-md-6">
+                        <div class="form-floating">
+                            <input type="email" class="form-control" id="email" placeholder="Email" required>
+                            <label for="email">Email Address</label>
+                        </div>
+                    </div>
+
+                    <div class="col-md-6">
+                        <div class="form-floating">
+                            <input type="tel" class="form-control" id="phone" placeholder="Phone" required>
+                            <label for="phone">Phone Number</label>
+                        </div>
+                    </div>
+
+                    <div class="col-12">
+                        <div class="form-group">
+                            <label class="mb-2">Gender</label>
+                            <div class="d-flex gap-4">
+                                <div class="form-check">
+                                    <input class="form-check-input" type="radio" name="gender" id="male" required>
+                                    <label class="form-check-label" for="male">Male</label>
+                                </div>
+                                <div class="form-check">
+                                    <input class="form-check-input" type="radio" name="gender" id="female">
+                                    <label class="form-check-label" for="female">Female</label>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="d-flex justify-content-end mt-4">
+                    <button type="button" class="btn btn-warning" onclick="nextStep(2)">Next <i class="fas fa-arrow-right ms-2"></i></button>
+                </div>
+            </div>
+
+            <!-- Step 2: Program Selection -->
+            <div class="form-section" data-step="2">
+                <h3 class="mb-4">Program Selection</h3>
+                
+                <div class="form-floating mb-3">
+                    <select class="form-select" id="education" required>
+                        <option value="">Select your education level</option>
+                        <option value="high_school">High School</option>
+                        <option value="bachelors">Bachelor's Degree</option>
+                        <option value="masters">Master's Degree</option>
+                        <option value="phd">PhD</option>
+                    </select>
+                    <label for="education">Highest Education Level</label>
+                </div>
+
+                <div class="form-floating mb-3">
+                    <select class="form-select" id="program" required>
+                        <option value="">Select your program</option>
+                        <option value="data_analytics">Data Analytics</option>
+                        <option value="ai_ml">AI & Machine Learning</option>
+                        <option value="cloud">Cloud Computing</option>
+                        <option value="big_data">Big Data</option>
+                    </select>
+                    <label for="program">Program Selection</label>
+                </div>
+
+                <div class="d-flex justify-content-between mt-4">
+                    <button type="button" class="btn btn-outline-warning" onclick="prevStep(1)">
+                        <i class="fas fa-arrow-left me-2"></i> Previous
+                    </button>
+                    <button type="button" class="btn btn-warning" onclick="nextStep(3)">
+                        Next <i class="fas fa-arrow-right ms-2"></i>
+                    </button>
+                </div>
+            </div>
+
+            <!-- Step 3: Documents -->
+            <div class="form-section" data-step="3">
+                <h3 class="mb-4">Document Upload</h3>
+                
+                <div class="custom-file-upload mb-4">
+                    <i class="fas fa-cloud-upload-alt fa-3x text-warning mb-3"></i>
+                    <h5>Upload Your Documents</h5>
+                    <p class="text-muted">Drag and drop your files here or click to browse</p>
+                    <input type="file" class="d-none" id="documentUpload" multiple>
+                </div>
+
+                <div class="form-check mb-4">
+                    <input class="form-check-input" type="checkbox" id="terms" required>
+                    <label class="form-check-label" for="terms">
+                        I agree to the terms and conditions
+                    </label>
+                </div>
+
+                <div class="d-flex justify-content-between">
+                    <button type="button" class="btn btn-outline-warning" onclick="prevStep(2)">
+                        <i class="fas fa-arrow-left me-2"></i> Previous
+                    </button>
+                    <button type="button" class="btn btn-warning" onclick="nextStep(4)">
+                        Next <i class="fas fa-arrow-right ms-2"></i>
+                    </button>
+                </div>
+            </div>
+
+            <!-- Step 4: Payment -->
+            <div class="form-section" data-step="4">
+                <h3 class="mb-4">Payment Information</h3>
+                
+                <div class="payment-options mb-4">
+                    <div class="payment-option" onclick="selectPayment(this)">
+                        <div class="d-flex align-items-center">
+                            <i class="fas fa-credit-card fa-2x text-warning me-3"></i>
+                            <div>
+                                <h5 class="mb-1">Credit Card</h5>
+                                <p class="mb-0 text-muted">Pay securely with your credit card</p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="payment-option" onclick="selectPayment(this)">
+                        <div class="d-flex align-items-center">
+                            <i class="fas fa-university fa-2x text-warning me-3"></i>
+                            <div>
+                                <h5 class="mb-1">Bank Transfer</h5>
+                                <p class="mb-0 text-muted">Pay directly from your bank account</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="d-flex justify-content-between">
+                    <button type="button" class="btn btn-outline-warning" onclick="prevStep(3)">
+                        <i class="fas fa-arrow-left me-2"></i> Previous
+                    </button>
+                    <button type="submit" class="btn btn-warning">
+                        Complete Enrollment <i class="fas fa-check ms-2"></i>
+                    </button>
+                </div>
+            </div>
+        </form>
+    </div>
+
+    <!-- Help Button -->
+    <div class="help-button" onclick="toggleHelp()">
+        <i class="fas fa-question fa-lg"></i>
+    </div>
+
+    <!-- Bootstrap JS -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    
+    <script>
+        // Form Navigation
+        function nextStep(step) {
+            document.querySelector(`.form-section[data-step="${step-1}"]`).classList.remove('active');
+            document.querySelector(`.form-section[data-step="${step}"]`).classList.add('active');
+            updateProgress(step);
+        }
+
+        function prevStep(step) {
+            document.querySelector(`.form-section[data-step="${step+1}"]`).classList.remove('active');
+            document.querySelector(`.form-section[data-step="${step}"]`).classList.add('active');
+            updateProgress(step);
+        }
+
+        function updateProgress(step) {
+            document.querySelectorAll('.progress-step').forEach((el, index) => {
+                if (index + 1 <= step) {
+                    el.classList.add('active');
+                } else {
+                    el.classList.remove('active');
+                }
+            });
+        }
+
+        // Payment Selection
+        function selectPayment(element) {
+            document.querySelectorAll('.payment-option').forEach(el => {
+                el.classList.remove('selected');
+            });
+            element.classList.add('selected');
+        }
+
+        // File Upload
+        document.querySelector('.custom-file-upload').addEventListener('click', () => {
+            document.getElementById('documentUpload').click();
+        });
+
+        // Form Submission
+        document.getElementById('enrollmentForm').addEventListener('submit', (e) => {
+            e.preventDefault();
+            // Add your form submission logic here
+            alert('Enrollment submitted successfully!');
+            window.location.href = 'confirmation.html';
+        });
+
+        // Help Toggle
+        function toggleHelp() {
+            // Add your help/chat functionality here
+            alert('Need help? Contact us at support@datarizedhub.com');
+        }
+
+        document.addEventListener('DOMContentLoaded', function() {
+            // Parallax Effect
+            window.addEventListener('scroll', function() {
+                const parallax = document.querySelector('.hero-parallax');
+                const scrolled = window.pageYOffset;
+                parallax.style.transform = `translateY(${scrolled * 0.5}px)`;
+            });
+
+            // Enhanced Form Animations
+            const formSections = document.querySelectorAll('.form-section');
+            formSections.forEach(section => {
+                section.addEventListener('animationend', () => {
+                    section.classList.add('animation-completed');
+                });
+            });
+
+            // Input Field Animations
+            const inputs = document.querySelectorAll('.form-control');
+            inputs.forEach(input => {
+                input.addEventListener('focus', () => {
+                    input.closest('.form-floating').classList.add('focused');
+                });
+                
+                input.addEventListener('blur', () => {
+                    if (!input.value) {
+                        input.closest('.form-floating').classList.remove('focused');
+                    }
+                });
+            });
+
+            // Enhanced Progress Step Animation
+            function updateProgress(step) {
+                document.querySelectorAll('.progress-step').forEach((el, index) => {
+                    if (index + 1 <= step) {
+                        el.classList.add('active');
+                        el.style.animationDelay = `${index * 0.2}s`;
+                    } else {
+                        el.classList.remove('active');
+                    }
+                });
+            }
+
+            // Button Click Effect
+            document.querySelectorAll('.btn').forEach(button => {
+                button.addEventListener('click', function(e) {
+                    const x = e.clientX - e.target.offsetLeft;
+                    const y = e.clientY - e.target.offsetTop;
+                    
+                    const ripple = document.createElement('span');
+                    ripple.style.left = `${x}px`;
+                    ripple.style.top = `${y}px`;
+                    
+                    this.appendChild(ripple);
+                    setTimeout(() => ripple.remove(), 600);
+                });
+            });
+        });
+
+        // Add this JavaScript for smooth scrolling when returning to index.html#contact
+        document.querySelector('a[href="index.html#contact"]').addEventListener('click', function(e) {
+            // Only handle the smooth scroll if we're going to index.html
+            if (window.location.pathname.includes('index.html')) {
+                e.preventDefault();
+                const contactSection = document.querySelector('#contact');
+                if (contactSection) {
+                    contactSection.scrollIntoView({
+                        behavior: 'smooth',
+                        block: 'start'
+                    });
+                }
+            }
+        });
+    </script>
+</body>
+</html> 
